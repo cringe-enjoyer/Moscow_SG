@@ -108,7 +108,6 @@ function findPlaces(address){
     item.id = 'te';
     let p = document.createElement('p')
     p.innerHTML = name;
-    p.style.fontWeight = 'bold'
     //item.innerHTML = name
     item.appendChild(p)
     item.appendChild(info)
@@ -132,7 +131,7 @@ function findPlaces(address){
 
 let find = document.getElementById('find')
 find.onclick = function (e) {
-    let footer = document.styleSheets[0].cssRules[16].style
+    let footer = document.styleSheets[0].cssRules[19].style
     footer.removeProperty('position')
     document.getElementById('map').style.display = 'block'
     let address = document.getElementById('address').value;
