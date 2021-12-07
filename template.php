@@ -23,28 +23,14 @@
             <div class="address_block">
                 <label class="address_label" for="address">Введите ваш адрес</label>
                 <input id="address" name="address" type="text" placeholder="Большая Семеновская 38" required>
-                <button class="button" id="find">Найти</button>
+                <form action="">
+                    <button type="submit" class="button" id="find">Найти</button>
+                </form>
+
             </div>
         </div>
-        <div class="container" id="info">
-            <!--<div class="text">
-                <p onclick="showText('te')" style="cursor: pointer">lol
-                <span id="te" style="display: none">
-                    sssssssssssssss <br>
-                    ssssssssssssss
-                    ssssssssssssss
-                    ssss
-                </span>
-                </p>
-            </div>-->
-            <!--<table>
-                <tr>
-                    <td>
-
-                    </td>
-                </tr>
-            </table>-->
-
+        <div class="sg_container" id="info">
+        <?$content?>
         </div>
         <div class="map">
             <img id="map" src="img/map.png" style="display: none" width="100%" height="100%">

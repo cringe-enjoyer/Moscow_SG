@@ -1,5 +1,7 @@
 const pattern = /^[А-Яа-я]+\s*[А-Яа-я]*[\s,.]+(дом|д|д\.|дом\.|Дом|Дом\.|Д\.)*\s*\d+/g
+
 let data
+
 function showText(id) {
     let text = document.getElementById(id)
     if (text.style.display !== 'block') {
@@ -19,16 +21,8 @@ function checkAddress(address){
     }
     return null
 }
-function renderRecords(records) {
-    let array_records = []
-    console.log(records)
-    for(i = 0; i < records.length; i++){
-        array_records.push(records[i])
-    }
-    console.log(array_records)
 
-}
-function selectData() {
+/*function selectData() {
     let xhr = new XMLHttpRequest()
     xhr.open('GET', 'https://apidata.mos.ru/v1/datasets/888/rows?$orderby=global_id&api_key=87bff77c6c5da179bff24b46f5359dec')
     xhr.responseType = 'json'
@@ -45,12 +39,12 @@ function selectData() {
             console.log(xhr.response)
         }
     }
-    /*let get = fetch('https://apidata.mos.ru/v1/datasets/888/rows?$orderby=global_id&api_key=87bff77c6c5da179bff24b46f5359dec')
+    /!*let get = fetch('https://apidata.mos.ru/v1/datasets/888/rows?$orderby=global_id&api_key=87bff77c6c5da179bff24b46f5359dec')
     if (get.ok) {
         let respopnse = get.json()
         data = respopnse
-    }*/
-}
+    }*!/
+}*/
 
 function createMap(address){
     let map = document.createElement('img')
@@ -63,7 +57,7 @@ function createMap(address){
     //map.parentElement.style.display = 'block'
 }
 
-function findPlaces(address){
+/*function findPlaces(address){
     let name = data[0].Cells.ObjectName;
     let item = document.createElement('div')
     let info = document.createElement('table')
@@ -116,24 +110,17 @@ function findPlaces(address){
     item.append(map)
     info.classList.add('hidden_text')
 
-    /*footer.style.removeProperty('left');
-    footer.style.removeProperty('right');
-    footer.style.removeProperty('bottom');*/
-    //console.log(item.firstElementChild.id)
-
 
     p.onclick = function (){
         showText(item.lastElementChild.id)
     }
-    //info.innerHTML = nearest_SG
     return item
-}
+}*/
 
 let find = document.getElementById('find')
 find.onclick = function (e) {
-    let footer = document.styleSheets[0].cssRules[19].style
+    let footer = document.styleSheets[0].cssRules[24].style
     footer.removeProperty('position')
-    document.getElementById('map').style.display = 'block'
     let address = document.getElementById('address').value;
     let good_address = checkAddress(address);
     if(good_address !== null) {
@@ -153,3 +140,89 @@ window.onload = function (){
 
 }
 
+const EART_RADIUS = 6371210; //Радиус земли
+const DISTANCE = 20000; //Интересующее нас расстояние
+
+//https://en.wikipedia.org/wiki/Longitude#Length_of_a_degree_of_longitude
+function computeDelta(degrees) {
+    return Math.PI / 180 * EART_RADIUS * Math.cos(deg2rad(degrees));
+}
+
+function deg2rad(degrees) {
+    return degrees * Math.PI / 180;
+}
+
+const latitude = 55.460531; //Интересующие нас координаты широты
+const longitude = 37.210488; //Интересующие нас координаты долготы
+
+const deltaLat = computeDelta(latitude); //Получаем дельту по широте
+const deltaLon = computeDelta(longitude); // Дельту по долготе
+
+const aroundLat = DISTANCE / deltaLat; // Вычисляем диапазон координат по широте
+const aroundLon = DISTANCE / deltaLon; // Вычисляем диапазон координат по долготе
+
+console.log(aroundLat, aroundLon);
+
+function findPlace(address){
+    let name = data[0].Cells.ObjectName;
+    let item = document.createElement('div')
+    let info = document.createElement('table')
+    info.id = 'inf'
+    info.style.display = 'none'
+    for (const Key in data[0].Cells) {
+        if (Key !== 'DimensionsSummer' && Key !== 'ObjectName' && Key !== 'global_id' && Key !== 'PhotoSummer' && Key !== 'geoData') {
+            if (Key == 'WorkingHoursSummer'){
+                let row = document.createElement('tr')
+                let cell = document.createElement('td')
+                cell.innerHTML = 'График работы'
+                row.append(cell)
+                info.append(row)
+                for(const Days in data[0].Cells[Key]){
+                    let row = document.createElement('tr')
+                    let cell = document.createElement('td')
+                    cell.innerHTML = data[0].Cells[Key][Days].DayOfWeek + ' ' + data[0].Cells[Key][Days].Hours
+                    row.append(cell)
+                    info.append(row)
+                }
+                continue
+            }
+            if(Key == 'WebSite'){
+                let row = document.createElement('tr')
+                let cell = document.createElement('td')
+                let site = data[0].Cells[Key]
+                site.url = data[0].Cells[Key]
+                cell.innerHTML = site
+                row.append(cell)
+                info.append(row)
+            }
+
+            let row = document.createElement('tr')
+            let cell = document.createElement('td')
+            cell.innerHTML = data[0].Cells[Key]
+            row.append(cell)
+            info.append(row)
+        }
+    }
+
+    item.classList.add('test')
+    item.id = 'te';
+    let p = document.createElement('p')
+    p.innerHTML = name;
+    //item.innerHTML = name
+    item.appendChild(p)
+    item.appendChild(info)
+
+    let map = createMap(address)
+    item.append(map)
+    info.classList.add('hidden_text')
+
+
+    p.onclick = function (){
+        showText(item.lastElementChild.id)
+    }
+    return item
+}
+
+function createDate(){
+
+}
