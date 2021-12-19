@@ -149,9 +149,11 @@ input, select, textarea{
 }
 
 .map{
-    display: flex;
+    width: 600px;
+    height: 400px;
+/*    display: flex;
     justify-content: end;
-    align-items: end;
+    align-items: end;*/
 }
 
 footer{
