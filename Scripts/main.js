@@ -4,26 +4,26 @@ let data
 let latitude;
 let longitude;
 var myMap = undefined;
-const userCoordinates = ['aba','ss'];
+let userCoordinates = [];
 let userBounds = '';
 
-function showText(element) {
+function showText(element, user_latitude, user_longitude, id) {
     let text = element.innerHTML;
     let sg_info = document.getElementById(text)
     if (sg_info.style.display != 'none') {
         sg_info.style.display = 'none';
-/*        let map = document.getElementById("map");
-        map.parentNode.removeChild(map);*/
+        let map = document.getElementById("map" + id);
+        sg_info.removeChild(map);
     }
     else {
         sg_info.style.display = 'flex'
-/*        latitude = element.latitude;
-        longitude = element.longitude;
+        latitude = element.dataset.latitude;
+        longitude = element.dataset.longitude;
         let map = document.createElement("div");
         map.className = "map";
-        map.id = "map";
-        text.append(map);
-        init(map)*/
+        map.id = "map" + id;
+        sg_info.append(map);
+        init(map, element, user_latitude, user_longitude)
     }
 }
 
@@ -186,24 +186,26 @@ function findPlace(address){
 }
 
 
-function init(map) {
-    myMap = new ymaps.Map("map", {
+function init(map, sg_name, user_latitude, user_longitude) {
+    console.log(parseFloat(sg_name.dataset.latitude))
+    myMap = new ymaps.Map(map.id + "", {
             center: [55.76, 37.64],
             zoom: 10
         }, {
             searchControlProvider: 'yandex#search'
-        });
+        })
 
-    myMap.geoObjects.add(new ymaps.Placemark([userCoordinates[0], userCoordinates[1]], {
+    myMap.geoObjects.add(new ymaps.Placemark([parseFloat(user_latitude), parseFloat(user_longitude)], {
             balloonContent: '<strong>Вы</strong>'
         }, {
             preset: 'islands#dotIcon',
             iconColor: '#f10b0b'
-        }))
-        .add(new ymaps.Placemark([parseFloat(map.dataset.latitude), parseFloat(map.dataset.longitude)], {
+        })).add(new ymaps.Placemark([parseFloat(sg_name.dataset.latitude), parseFloat(sg_name.dataset.longitude)], {
+            balloonContent: sg_name.innerHTML.toString()
+            }, {
         preset: 'islands#dotIcon',
         iconColor: '#735184'
-    }))
+    }));
 }
 let find_button = document.forms.search;
 

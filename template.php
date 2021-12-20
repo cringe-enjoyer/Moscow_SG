@@ -48,14 +48,17 @@
             $longitude = $_POST["longitude"];
 
             require("DB.php");
-            $query = "SELECT * FROM ((SELECT * from sg_data2 WHERE latitude < ".$latitude ."  OR longitude < ".$longitude." 
-    ORDER BY latitude, longitude DESC LIMIT 3) UNION (SELECT * from sg_data2 WHERE latitude > ".$latitude." OR longitude > ".$longitude." 
-    ORDER BY latitude, longitude DESC LIMIT 3)) as nearest_sg ORDER BY latitude, longitude DESC LIMIT 3;";
+            $query = "SELECT * FROM ((SELECT * from sg_data2 WHERE latitude < ".$latitude ." AND longitude < ".$longitude." 
+            OR latitude < ".$latitude ." AND longitude > ".$longitude." ORDER BY latitude DESC, longitude DESC LIMIT 6) 
+            UNION (SELECT * from sg_data2 WHERE latitude > ".$latitude." AND longitude > ".$longitude." 
+    OR latitude > ".$latitude." AND longitude < ".$longitude." ORDER BY latitude DESC, longitude DESC LIMIT 6))
+     as nearest_sg ORDER BY latitude ASC, longitude ASC LIMIT 3;";
             $result = mysqli_query($conn, $query);
             $content = "";
             while ($sGallery = mysqli_fetch_assoc($result)) {
 
-                $content .= "<h1 class='sg-name' onclick='showText(this)' data-latitude='".$sGallery['latitude']."' 
+                $content .= "<h1 class='sg-name' onclick='showText(this, ".$latitude.", ".$longitude.", ".$sGallery['global_id'].")'
+                 data-latitude='".$sGallery['latitude']."' 
         data-longitude='".$sGallery['longitude']."'>".$sGallery['ObjectName']."</h1>
                     <div class='sg-object' style='display: none' id='".$sGallery['ObjectName']."'>";
                 $column = 0;
