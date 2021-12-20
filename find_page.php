@@ -7,27 +7,21 @@ const COLUMNS_NAME = ["Название в летний период", "Адми
     "Комментарий к стоимости посещения", "Приспособленность для занятий инвалидов", "Услуги предоставляемые в летний период"];
 
 $pattern = "/([A-Z a-z]+:)/";
-if (isset($_POST['latitude']) and $_POST['latitude'] != ''){
+if(isset($_POST["latitude"])){
 
-
-    $longitude = (double) $_POST['longitude'];
-    $latitude = (double) $_POST['latitude'];
-/*}
-if (isset($_POST['longitude'])) {
-    $longitude = $_POST['longitude'];
-    $latitude = $_POST['latitude'];*/
+    $latitude = 55.781291;
+    $longitude = 37.711518;
 
     require("DB.php");
-    $query = "SELECT * FROM ((SELECT * from sg WHERE latitude < " . $latitude . " AND longitude < " . $longitude . "  -- OR или And?
-    ORDER BY latitude, longitude DESC LIMIT 3) UNION (SELECT * from sg WHERE latitude > " . $latitude . " AND longitude > " . $longitude . " 
+    $query = "SELECT * FROM ((SELECT * from sg_data2 WHERE latitude < ".$latitude ."  OR longitude < ".$longitude." 
+    ORDER BY latitude, longitude DESC LIMIT 3) UNION (SELECT * from sg_data2 WHERE latitude > ".$latitude." OR longitude > ".$longitude." 
     ORDER BY latitude, longitude DESC LIMIT 3)) as nearest_sg ORDER BY latitude, longitude DESC LIMIT 3;";
     $result = mysqli_query($conn, $query);
-
     $content = "";
     while ($sGallery = mysqli_fetch_assoc($result)) {
 
-        $content .= "<h1 class='sg_name' onclick='showText(this)' data-latitude='".$sGallery['latitude']."' 
-        data-longitude='".$sGallery['longitude']."'></h1>
+        $content .= "<h1 class='sg-name' onclick='showText(this)' data-latitude='".$sGallery['latitude']."' 
+        data-longitude='".$sGallery['longitude']."'>".$sGallery['ObjectName']."</h1>
                     <div class='sg_container' id='".$sGallery['ObjectName']."'>";
         $column = 0;
         foreach ($sGallery as $col => $row) {
@@ -69,10 +63,5 @@ if (isset($_POST['longitude'])) {
         $content .= "</div>";
 
     }
-
+    require ('template.php');
 }
-else{
-
-}
-require ('template.php');
-

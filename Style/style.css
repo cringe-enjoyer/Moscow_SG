@@ -137,7 +137,7 @@ input, select, textarea{
     cursor: pointer;
 }
 
-.sg_name{
+.sg-name{
     cursor: pointer;
     font-family: PTSansNarrowBold;
 }

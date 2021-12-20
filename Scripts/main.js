@@ -235,19 +235,17 @@ function submit_form(){
 /*    let latitude = document.getElementById('latitude');
     let longitude = document.getElementById('longitude');*/
     let form = document.forms.search
-    let latitude = form.elements.latitude;
-    let longitude = form.elements.longitude;
     let address = document.getElementById('address').value;
     let good_address = checkAddress(address);
-    let coord = []
+    let userCoordinates = [];
     if(good_address !== null) {
         good_address = 'Москва ' + good_address;
-        console.log(good_address)
         var myMap = new ymaps.Map('map', {
             center: [55.753994, 37.622093],
             zoom: 9
         });
-        ymaps.geocode(good_address.toString(), {
+        console.log(good_address)
+        ymaps.geocode(good_address, {
             /**
              * Опции запроса
              * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/geocode.xml
@@ -266,11 +264,11 @@ function submit_form(){
                 // Область видимости геообъекта.
                 bounds = firstGeoObject.properties.get('boundedBy');
 
-            form.elements.latitude.value = coords[0].toString();
-            form.elements.longitude.value = coords[1].toString();
-            coord = coords
+            userCoordinates[0] = coords[0];
+            userCoordinates[1] = coords[1];
+
             console.log(coords[0])
-            console.log(latitude)
+
             firstGeoObject.options.set('preset', 'islands#darkBlueDotIconWithCaption');
             // Получаем строку с адресом и выводим в иконке геообъекта.
             firstGeoObject.properties.set('iconCaption', firstGeoObject.getAddressLine());
@@ -283,8 +281,8 @@ function submit_form(){
                 checkZoomRange: false
             });
 
-            form.elements.latitude.value = coord[0].toString();
-            form.elements.longitude.value = coord[1].toString();
+/*            form.elements.latitude.value = coords[0].toString();
+            form.elements.longitude.value = coords[1].toString();*/
 
             /**
              * Все данные в виде javascript-объекта.
@@ -336,8 +334,11 @@ function submit_form(){
 
              myMap.geoObjects.add(myPlacemark);
              */
+            form.elements.latitude.value = userCoordinates[0].toString()
+            form.elements.longitude.value = userCoordinates[1].toString()
+            form.submit()
         });
-        form.submit()
+
     }
     else{
         alert('Вы ввели странный адрес. Попробуйте ещё.')
