@@ -37,13 +37,13 @@ body{
     background-color: #000000;
 }
 
-.address_block{
+.address-block{
     display: grid;
     margin-top: 10px;
     align-items: center;
 }
 
-.address_block input{
+.address-block input{
     border: 2px solid #FFFFFF;
     box-sizing: border-box;
     border-radius: 10px;;
@@ -93,7 +93,7 @@ input, select, textarea{
     border-radius: 10px;
 }
 
-.address_label{
+.address-label{
     text-align: center;
     margin-bottom: 5px;
     font-weight: bold;
@@ -117,29 +117,43 @@ input, select, textarea{
     letter-spacing: 0.06em;
 }
 
-.sg_container{
+.sg-container{
     display: flex;
     flex-direction: column;
     background-color: #FFFFFF;
+    margin-top: 5px;
+    padding: 0;
 }
 
-.sg_row{
+.sg-row{
     display: flex;
     flex-direction: row;
+
 }
 
-.sg_cell{
+.sg-cell{
     display: flex;
     flex-direction: column;
+    margin: 5px;
 }
 
-.sg_info{
+.sg-info{
     cursor: pointer;
 }
 
 .sg-name{
     cursor: pointer;
     font-family: PTSansNarrowBold;
+    margin-top: 5px;
+    padding: 0;
+    background-color: white;
+}
+
+.sg-object{
+    flex-direction: column;
+    background-color: #FFFFFF;
+    margin-top: 5px;
+    padding: 0;
 }
 
 .hidden_text{

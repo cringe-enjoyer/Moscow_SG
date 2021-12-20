@@ -22,19 +22,19 @@ if(isset($_POST["latitude"])){
 
         $content .= "<h1 class='sg-name' onclick='showText(this)' data-latitude='".$sGallery['latitude']."' 
         data-longitude='".$sGallery['longitude']."'>".$sGallery['ObjectName']."</h1>
-                    <div class='sg_container' id='".$sGallery['ObjectName']."'>";
+                    <div class='sg-container' id='".$sGallery['ObjectName']."'>";
         $column = 0;
         foreach ($sGallery as $col => $row) {
             if('ObjectName' == $col or 'global_id' == $col or 'PhotoSummer' == $col or
                 'longitude' == $col or 'latitude' == $col or 'geoarea' == $col){
                 continue;
             }
-            $content .= "<div class='sg_row' >";
+            $content .= "<div class='sg-row' >";
 
 
             if (is_null($row)){
-                $content .= "<div class='sg_cell'>".COLUMNS_NAME[$column]."</div>
-                <div class='sg_cell'><p>Нет</p></div>";
+                $content .= "<div class='sg-cell'>".COLUMNS_NAME[$column]."</div>
+                <div class='sg-cell'><p>Нет</p></div>";
             }
 
             elseif ('WorkingHoursSummer' == $col){
@@ -44,19 +44,19 @@ if(isset($_POST["latitude"])){
                     $workingHours .= $day[$i]." ".$day[$i+1]."<br>";
                     $i += 2;
                 }
-                $content .= "<div class='sg_cell'>".COLUMNS_NAME[$column]."</div>
-                <div class='sg_cell'>".$workingHours."</div>";
+                $content .= "<div class='sg-cell'>".COLUMNS_NAME[$column]."</div>
+                <div class='sg-cell'>".$workingHours."</div>";
 
             }
             elseif('DimensionsSummer' == $col){
                 $dimension = preg_split($pattern, $row);
-                $content .= "<div class='sg_cell'>".COLUMNS_NAME[$column]."</div><div class='sg_cell'>
+                $content .= "<div class='sg-cell'>".COLUMNS_NAME[$column]."</div><div class='sg-cell'>
                 <p>Площадь: ".$dimension[1]."<br>Длина:".$dimension[2]."<br>Высота:".$dimension[3]."<p></div>";
 
             }
             else
-                $content .= "<div class='sg_cell'>".COLUMNS_NAME[$column]."</div>
-                <div class='sg_cell'><p>".$row."</p></div>";
+                $content .= "<div class='sg-cell'>".COLUMNS_NAME[$column]."</div>
+                <div class='sg-cell'><p>".$row."</p></div>";
             $content .= "</div>";
             $column++;
         }

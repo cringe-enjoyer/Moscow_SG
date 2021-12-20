@@ -8,22 +8,22 @@ const userCoordinates = ['aba','ss'];
 let userBounds = '';
 
 function showText(element) {
-    let text = element.nextSibling;
-    //let text = document.getElementById(id)
-    if (text.style.display !== 'none') {
-        text.style.display = 'none';
-        let map = document.getElementById("map");
-        map.parentNode.removeChild(map);
+    let text = element.innerHTML;
+    let sg_info = document.getElementById(text)
+    if (sg_info.style.display != 'none') {
+        sg_info.style.display = 'none';
+/*        let map = document.getElementById("map");
+        map.parentNode.removeChild(map);*/
     }
     else {
-        text.style.display = 'flex'
-        latitude = element.latitude;
+        sg_info.style.display = 'flex'
+/*        latitude = element.latitude;
         longitude = element.longitude;
         let map = document.createElement("div");
         map.className = "map";
         map.id = "map";
         text.append(map);
-        init(map)
+        init(map)*/
     }
 }
 
@@ -35,30 +35,6 @@ function checkAddress(address){
     }
     return null
 }
-
-/*function selectData() {
-    let xhr = new XMLHttpRequest()
-    xhr.open('GET', 'https://apidata.mos.ru/v1/datasets/888/rows?$orderby=global_id&api_key=87bff77c6c5da179bff24b46f5359dec')
-    xhr.responseType = 'json'
-    xhr.send();
-    xhr.timeout = 10000
-    xhr.ontimeout = function (){
-        alert('boom')
-    }
-    xhr.onload = function (){
-        if(xhr.status != 200){
-            alert(`Ошибка ${xhr.status}: ${xhr.statusText}`)
-        } else {
-            data = xhr.response;
-            console.log(xhr.response)
-        }
-    }
-    /!*let get = fetch('https://apidata.mos.ru/v1/datasets/888/rows?$orderby=global_id&api_key=87bff77c6c5da179bff24b46f5359dec')
-    if (get.ok) {
-        let respopnse = get.json()
-        data = respopnse
-    }*!/
-}*/
 
 function createMap(address){
     let map = document.createElement('img')
