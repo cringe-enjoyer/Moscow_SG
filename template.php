@@ -6,7 +6,9 @@
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
                 <title>Тиры Москвы</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="Style/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=2b7e9cf1-cc82-45e8-b178-813cef04cd6b" type="text/javascript">
     </script>
     <script src="Scripts/main.js"></script>
@@ -22,18 +24,20 @@
 
 </header>
     <main class="main">
-        <div class="container">
+        <div class="address-container">
             <div class="address-block">
                 <form class="address-block" name="search" method="POST">
                     <input name="latitude" id="latitude" type="hidden">
                     <input name="longitude" id="longitude" type="hidden">
+                    <input id="enter" name="enter" type="submit" onclick="alert('Нажмите кнопку найти'); return false" hidden>
                     <label class="address-label" for="address">Введите ваш адрес</label>
                     <input id="address" name="address" type="text" value="<?if (isset($_POST['address'])) echo $_POST['address']?>" placeholder="Большая Семеновская 38" required>
-                    <button id="find" type="button" onclick="submit_form()" class="button">Найти</button>
+                    <button name="find" id="find" type="button" onclick="submit_form()" class="button">Найти</button>
                 </form>
             </div>
         </div>
-        <div class="sg-container" id="info">
+        <div class="container pb-0 bg-light" id="info">
+
         <?php const COLUMNS_NAME = ["Название в летний период", "Административный округ", "Район", "Адрес", "Электронная почта",
             "Сайт", "Телефон", "График работы в летний период", "Возможность проката оборудования",
             "Наличие сервиса тех. обслуживания", "Наличие раздевалки", "Наличие точки питания", "Наличие туалета", "Наличие Wi-Fi",
@@ -48,11 +52,11 @@
             $longitude = $_POST["longitude"];
 
             require("DB.php");
-            $query = "SELECT * FROM ((SELECT * from sg_data2 WHERE latitude < ".$latitude ." AND longitude < ".$longitude." 
-            OR latitude < ".$latitude ." AND longitude > ".$longitude." ORDER BY latitude DESC, longitude DESC LIMIT 6) 
-            UNION (SELECT * from sg_data2 WHERE latitude > ".$latitude." AND longitude > ".$longitude." 
-    OR latitude > ".$latitude." AND longitude < ".$longitude." ORDER BY latitude DESC, longitude DESC LIMIT 6))
-     as nearest_sg ORDER BY latitude ASC, longitude ASC LIMIT 3;";
+            $query = "SELECT (ACOS(SIN(latitude * PI() / 180) * SIN(".$latitude." * PI() / 180) + COS(latitude * PI() / 180) * 
+            COS(".$latitude." * PI() / 180) * 
+             COS((longitude * PI() / 180) - (".$longitude." * PI() / 180)))) as 'distance',
+             sg_data2.* FROM sg_data2 
+            ORDER BY distance LIMIT 3";
             $result = mysqli_query($conn, $query);
             $content = "";
             while ($sGallery = mysqli_fetch_assoc($result)) {
@@ -60,19 +64,19 @@
                 $content .= "<h1 class='sg-name' onclick='showText(this, ".$latitude.", ".$longitude.", ".$sGallery['global_id'].")'
                  data-latitude='".$sGallery['latitude']."' 
         data-longitude='".$sGallery['longitude']."'>".$sGallery['ObjectName']."</h1>
-                    <div class='sg-object' style='display: none' id='".$sGallery['ObjectName']."'>";
+                    <div class='sg-object mb-0' style='display: none' id='".$sGallery['global_id']."'><table class='table-light table-bordered'>";
                 $column = 0;
                 foreach ($sGallery as $col => $row) {
                     if('ObjectName' == $col or 'global_id' == $col or 'PhotoSummer' == $col or
-                        'longitude' == $col or 'latitude' == $col or 'geoarea' == $col){
+                        'longitude' == $col or 'latitude' == $col or 'geoarea' == $col or 'distance' == $col){
                         continue;
                     }
-                    $content .= "<div class='sg-row' >";
+                    $content .= "<tr class='table-light' >";
 
 
                     if (is_null($row)){
-                        $content .= "<div class='sg-cell'>".COLUMNS_NAME[$column]."</div>
-                <div class='sg-cell'>Нет</div>";
+                        $content .= "<td class='table-light'>".COLUMNS_NAME[$column]."</td>
+                <td class='table-light'>Нет</td>";
                     }
 
                     elseif ('WorkingHoursSummer' == $col){
@@ -82,27 +86,29 @@
                             $workingHours .= $day[$i]." ".$day[$i+1]."<br>";
                             $i += 2;
                         }
-                        $content .= "<div class='sg-cell'>".COLUMNS_NAME[$column]."</div>
-                <div class='sg-cell'>".$workingHours."</div>";
+                        $content .= "<td class='table-light'>".COLUMNS_NAME[$column]."</td>
+                <td class='table-light'>".$workingHours."</td>";
 
                     }
                     elseif('DimensionsSummer' == $col){
                         $dimension = preg_split($pattern, $row);
-                        $content .= "<div class='sg-cell'>".COLUMNS_NAME[$column]."</div><div class='sg-cell'>
-                <p>Площадь: ".$dimension[1]."<br>Длина:".$dimension[2]."<br>Высота:".$dimension[3]."<p></div>";
+                        $content .= "<td class='table-light'>".COLUMNS_NAME[$column]."</td>
+                        <td class='table-light'>
+                <p>Площадь: ".$dimension[1]."<br>Длина:".$dimension[2]."<br>Высота:".$dimension[3]."<p></td>";
 
                     }
                     else
-                        $content .= "<div class='sg-cell'>".COLUMNS_NAME[$column]."</div>
-                <div class='sg-cell'>".$row."</div>";
-                    $content .= "</div>";
+                        $content .= "<td class='table-light'>".COLUMNS_NAME[$column]."</td>
+                <td class='table-light'>".$row."</td>";
+                    $content .= "</tr>";
                     $column++;
                 }
-                $content .= "</div>";
+                $content .= "</table></div>";
 
             }
         echo $content;
         }?>
+
         </div>
 
 <div id="map">
@@ -110,7 +116,7 @@
 </div>
     </main>
 </body>
-<footer class="footer">
+<footer id="footer" class="footer position-fixed bottom-0">
     <div class="footer-info">
         <p>&copy;Корчагин И.В.</p>
     </div>

@@ -1,26 +1,36 @@
-const pattern = /^[А-Яа-я]+\s*[А-Яа-я]*[\s,.]+(дом|д|д\.|дом\.|Дом|Дом\.|Д\.)*\s*\d+/g
+const pattern = /^(ул|ул.|улица|улица.|Улица|Улица.)*\s*[А-Яа-я]+\s*[А-Яа-я]*[\s,.]+(дом|д|д\.|дом\.|Дом|Дом\.|Д\.)*\s*\d+/g
 
-let data
 let latitude;
 let longitude;
 var myMap = undefined;
 let userCoordinates = [];
 let userBounds = '';
+let sgOpenCount = 0;
 
 function showText(element, user_latitude, user_longitude, id) {
-    let text = element.innerHTML;
-    let sg_info = document.getElementById(text)
+    let sg_info = document.getElementById(id);
+    let footer = document.getElementById('footer');
     if (sg_info.style.display != 'none') {
+        sgOpenCount--;
         sg_info.style.display = 'none';
+        element.classList.remove('mb-0');
+        element.classList.remove('align-center');
         let map = document.getElementById("map" + id);
         sg_info.removeChild(map);
+        if(sgOpenCount == 0)
+            footer.classList.add('position-fixed')
     }
     else {
+        if(sgOpenCount == 0)
+            footer.classList.remove('position-fixed');
+        sgOpenCount++;
         sg_info.style.display = 'flex'
+        element.classList.add('mb-0');
         latitude = element.dataset.latitude;
         longitude = element.dataset.longitude;
         let map = document.createElement("div");
         map.className = "map";
+        element.classList.add('align-center');
         map.id = "map" + id;
         sg_info.append(map);
         init(map, element, user_latitude, user_longitude)
@@ -36,125 +46,8 @@ function checkAddress(address){
     return null
 }
 
-function createMap(address){
-    let map = document.createElement('img')
-    let img = new Image(100, 100);
-    img.src = "F:\\ЯСтудент\\Базы данных\\Cursach\\map.png"
-    map.src = img.src
-    map.width = '100%'
-    map.height = '100%'
-    map.style.display = 'block'
-    //map.parentElement.style.display = 'block'
-}
-
-/*function findPlaces(address){
-    let name = data[0].Cells.ObjectName;
-    let item = document.createElement('div')
-    let info = document.createElement('table')
-    info.id = 'inf'
-    info.style.display = 'none'
-    for (const Key in data[0].Cells) {
-        if (Key !== 'DimensionsSummer' && Key !== 'ObjectName' && Key !== 'global_id' && Key !== 'PhotoSummer' && Key !== 'geoData') {
-            if (Key == 'WorkingHoursSummer'){
-                let row = document.createElement('tr')
-                let cell = document.createElement('td')
-                cell.innerHTML = 'График работы'
-                row.append(cell)
-                info.append(row)
-                for(const Days in data[0].Cells[Key]){
-                    let row = document.createElement('tr')
-                    let cell = document.createElement('td')
-                    cell.innerHTML = data[0].Cells[Key][Days].DayOfWeek + ' ' + data[0].Cells[Key][Days].Hours
-                    row.append(cell)
-                    info.append(row)
-                }
-                continue
-            }
-            if(Key == 'WebSite'){
-                let row = document.createElement('tr')
-                let cell = document.createElement('td')
-                let site = data[0].Cells[Key]
-                site.url = data[0].Cells[Key]
-                cell.innerHTML = site
-                row.append(cell)
-                info.append(row)
-            }
-
-            let row = document.createElement('tr')
-            let cell = document.createElement('td')
-            cell.innerHTML = data[0].Cells[Key]
-            row.append(cell)
-            info.append(row)
-        }
-    }
-
-    item.classList.add('test')
-    item.id = 'te';
-    let p = document.createElement('p')
-    p.innerHTML = name;
-    //item.innerHTML = name
-    item.appendChild(p)
-    item.appendChild(info)
-
-    let map = createMap(address)
-    item.append(map)
-    info.classList.add('hidden_text')
-
-
-    p.onclick = function (){
-        showText(item.lastElementChild.id)
-    }
-    return item
-}*/
-
-/*let find = document.getElementById('find')
-find.onclick = function (e) {
-    let footer = document.styleSheets[0].cssRules[24].style
-    footer.removeProperty('position')
-    let address = document.getElementById('address').value;
-    let good_address = checkAddress(address);
-    if(good_address !== null) {
-        let old_data = document.querySelector('.test')
-        if (old_data !== null)
-            old_data.remove()
-        let shooting_galleries = findPlaces(good_address);
-        document.getElementById('info').append(shooting_galleries)
-
-    }
-    else{
-        alert('Вы ввели странный адрес. Попробуйте ещё.')
-    }
-}*/
-/*window.onload = function (){
-    setInterval(selectData(), 30000)
-
-}*/
-
-/*const EART_RADIUS = 6371210; //Радиус земли
-const DISTANCE = 20000; //Интересующее нас расстояние
-
-//https://en.wikipedia.org/wiki/Longitude#Length_of_a_degree_of_longitude
-function computeDelta(degrees) {
-    return Math.PI / 180 * EART_RADIUS * Math.cos(deg2rad(degrees));
-}
-
-function deg2rad(degrees) {
-    return degrees * Math.PI / 180;
-}
-
-const latitude = 55.460531; //Интересующие нас координаты широты
-const longitude = 37.210488; //Интересующие нас координаты долготы
-
-const deltaLat = computeDelta(latitude); //Получаем дельту по широте
-const deltaLon = computeDelta(longitude); // Дельту по долготе
-
-const aroundLat = DISTANCE / deltaLat; // Вычисляем диапазон координат по широте
-const aroundLon = DISTANCE / deltaLon; // Вычисляем диапазон координат по долготе
-
-console.log(aroundLat, aroundLon);*/
 
 function findPlace(address){
-    console.log("booba")
     ymaps.geocode(address, {
         results: 1
     }).then(function (res) {
@@ -187,7 +80,6 @@ function findPlace(address){
 
 
 function init(map, sg_name, user_latitude, user_longitude) {
-    console.log(parseFloat(sg_name.dataset.latitude))
     myMap = new ymaps.Map(map.id + "", {
             center: [55.76, 37.64],
             zoom: 10
@@ -222,7 +114,7 @@ function submit_form(){
             center: [55.753994, 37.622093],
             zoom: 9
         });
-        console.log(good_address)
+        //console.log(good_address)
         ymaps.geocode(good_address, {
             /**
              * Опции запроса
@@ -245,7 +137,7 @@ function submit_form(){
             userCoordinates[0] = coords[0];
             userCoordinates[1] = coords[1];
 
-            console.log(coords[0])
+            //console.log(coords[0])
 
             firstGeoObject.options.set('preset', 'islands#darkBlueDotIconWithCaption');
             // Получаем строку с адресом и выводим в иконке геообъекта.
@@ -264,27 +156,27 @@ function submit_form(){
 
             /**
              * Все данные в виде javascript-объекта.
-             */
+
             console.log('Все данные геообъекта: ', firstGeoObject.properties.getAll());
             /**
              * Метаданные запроса и ответа геокодера.
              * @see https://api.yandex.ru/maps/doc/geocoder/desc/reference/GeocoderResponseMetaData.xml
-             */
+
             console.log('Метаданные ответа геокодера: ', res.metaData);
             /**
              * Метаданные геокодера, возвращаемые для найденного объекта.
              * @see https://api.yandex.ru/maps/doc/geocoder/desc/reference/GeocoderMetaData.xml
-             */
+
             console.log('Метаданные геокодера: ', firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData'));
             /**
              * Точность ответа (precision) возвращается только для домов.
              * @see https://api.yandex.ru/maps/doc/geocoder/desc/reference/precision.xml
-             */
+
             console.log('precision', firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.precision'));
             /**
              * Тип найденного объекта (kind).
              * @see https://api.yandex.ru/maps/doc/geocoder/desc/reference/kind.xml
-             */
+
             console.log('Тип геообъекта: %s', firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.kind'));
             console.log('Название объекта: %s', firstGeoObject.properties.get('name'));
             console.log('Описание объекта: %s', firstGeoObject.properties.get('description'));
@@ -292,7 +184,7 @@ function submit_form(){
             /**
              * Прямые методы для работы с результатами геокодирования.
              * @see https://tech.yandex.ru/maps/doc/jsapi/2.1/ref/reference/GeocodeResult-docpage/#getAddressLine
-             */
+
             console.log('\nГосударство: %s', firstGeoObject.getCountry());
             console.log('Населенный пункт: %s', firstGeoObject.getLocalities().join(', '));
             console.log('Адрес объекта: %s', firstGeoObject.getAddressLine());
