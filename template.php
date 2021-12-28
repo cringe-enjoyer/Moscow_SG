@@ -29,7 +29,7 @@
                 <form class="address-block" name="search" method="POST">
                     <input name="latitude" id="latitude" type="hidden">
                     <input name="longitude" id="longitude" type="hidden">
-                    <input id="enter" name="enter" type="submit" onclick="alert('Нажмите кнопку найти'); return false" hidden>
+                    <input id="enter" name="enter" type="submit" onclick="return false" hidden>
                     <label class="address-label" for="address">Введите ваш адрес</label>
                     <input id="address" name="address" type="text" value="<?if (isset($_POST['address'])) echo $_POST['address']?>" placeholder="Большая Семеновская 38" required>
                     <button name="find" id="find" type="button" onclick="submit_form()" class="button">Найти</button>

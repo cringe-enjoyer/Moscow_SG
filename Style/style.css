@@ -117,14 +117,6 @@ input, select, textarea{!important;
     letter-spacing: 0.06em;
 }
 
-.sg-container{
-    display: flex;
-    flex-direction: column;
-    background-color: #FFFFFF;
-    margin-top: 5px;
-    padding: 0;
-}
-
 .sg-row{
     display: flex;
     flex-direction: row;
@@ -135,10 +127,6 @@ input, select, textarea{!important;
     display: flex;
     flex-direction: column;
     margin: 5px;
-}
-
-.sg-info{
-    cursor: pointer;
 }
 
 .sg-name{
@@ -154,12 +142,6 @@ input, select, textarea{!important;
     background-color: #FFFFFF;
     margin-top: 5px;
     padding: 0;
-}
-
-.hidden_text{
-    border: 5px solid black;
-    box-sizing: border-box;
-    cursor: auto;
 }
 
 .map{
