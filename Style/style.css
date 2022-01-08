@@ -43,7 +43,7 @@ body{
     align-items: center;
 }
 
-.address-block input{!important;
+.address-input{!important;
     border: 2px solid #FFFFFF;
     box-sizing: border-box;
     border-radius: 10px;;

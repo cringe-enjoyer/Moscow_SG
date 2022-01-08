@@ -25,13 +25,29 @@
 </header>
     <main class="main">
         <div class="address-container">
-            <div class="address-block">
-                <form class="address-block" name="search" method="POST">
+            <div class="container w-100">
+                <form class="container justify-content-center" name="search" method="POST">
                     <input name="latitude" id="latitude" type="hidden">
                     <input name="longitude" id="longitude" type="hidden">
                     <input id="enter" name="enter" type="submit" onclick="return false" hidden>
-                    <label class="address-label" for="address">Введите ваш адрес</label>
-                    <input id="address" name="address" type="text" value="<?if (isset($_POST['address'])) echo $_POST['address']?>" placeholder="Большая Семеновская 38" required>
+                    <div class="row">
+                        <label class="address-label" for="address">Введите ваш адрес</label>
+                        <div class="col-11">
+                            <input class="address-input w-100" id="address" name="address" type="text" value="<?if (isset($_POST['address'])) echo $_POST['address']?>" placeholder="Большая Семеновская 38" required>
+                        </div>
+                        <div class="col-1">
+                            <select id="count" name="count" style="max-width: 50px">
+                                <?if (isset($_POST['count']))
+                                    $limit = $_POST['count'];
+                                else $limit = 3?>
+                                <option <?if($limit == 3) echo "selected='selected'"?>>3</option>
+                                <option <?if($limit == 5) echo "selected='selected'"?>>5</option>
+                                <option <?if($limit == 10) echo "selected='selected'"?>>10</option>
+                                <option <?if($limit == 15) echo "selected='selected'"?>>15</option>
+                            </select>
+                        </div>
+
+                    </div>
                     <button name="find" id="find" type="button" onclick="submit_form()" class="button">Найти</button>
                 </form>
             </div>
@@ -50,13 +66,12 @@
 
             $latitude = $_POST["latitude"];
             $longitude = $_POST["longitude"];
-
             require("DB.php");
             $query = "SELECT (ACOS(SIN(latitude * PI() / 180) * SIN(".$latitude." * PI() / 180) + COS(latitude * PI() / 180) * 
             COS(".$latitude." * PI() / 180) * 
              COS((longitude * PI() / 180) - (".$longitude." * PI() / 180)))) as 'distance',
              sg_data2.* FROM sg_data2 
-            ORDER BY distance LIMIT 3";
+            ORDER BY distance LIMIT ".$limit;
             $result = mysqli_query($conn, $query);
             $content = "";
             while ($sGallery = mysqli_fetch_assoc($result)) {
