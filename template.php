@@ -112,6 +112,18 @@
                 <p>Площадь: ".$dimension[1]."<br>Длина:".$dimension[2]."<br>Высота:".$dimension[3]."<p></td>";
 
                     }
+                    elseif('WebSite' == $col){
+                        $content .= "<td class='table-light'>".COLUMNS_NAME[$column]."</td>
+                <td class='table-light'><a href='//".$row."'>".$row."</a></td>";
+                        $content .= "</tr>";
+                        $column++;
+                    }
+                    elseif('Email' == $col){
+                        $content .= "<td class='table-light'>".COLUMNS_NAME[$column]."</td>
+                <td class='table-light'><a href='mailto:".$row."'>".$row."</a></td>";
+                        $content .= "</tr>";
+                        $column++;
+                    }
                     else
                         $content .= "<td class='table-light'>".COLUMNS_NAME[$column]."</td>
                 <td class='table-light'>".$row."</td>";
