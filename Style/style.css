@@ -72,6 +72,7 @@ header{
     font-size: 25px;
     max-width: 769px;
     margin: 0 auto;
+    margin-bottom: 10px;
 }
 
 input, select, textarea{!important;
