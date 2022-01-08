@@ -47,14 +47,51 @@ function checkAddress(address){
 
 
 function init(map, sg_name, user_latitude, user_longitude) {
+    var multiRoute = new ymaps.multiRouter.MultiRoute({
+        referencePoints: [
+            [user_latitude, user_longitude],
+            [parseFloat(sg_name.dataset.latitude), parseFloat(sg_name.dataset.longitude)]
+        ],
+        params: {
+            results: 2
+        }}, {
+        boundsAutoApply: true
+    })
+    var carRouteButton = new ymaps.control.Button({
+            data: {content: "На машине"},
+            options: {selectOnClick: true}
+        }),
+        masstansitButton = new ymaps.control.Button({
+            data: {content: "На общественном транспорте"},
+            options: {selectOnClick: true}
+        });
+
+    carRouteButton.events.add('select', function (){
+        multiRoute.model.setParams({routingMode: 'auto'}, true)
+        masstansitButton.deselect()
+    });
+
+    masstansitButton.events.add('select', function (){
+        multiRoute.model.setParams({routingMode: 'masstransit'}, true)
+        carRouteButton.deselect()
+    });
+
     myMap = new ymaps.Map(map.id + "", {
             center: [55.76, 37.64],
-            zoom: 11
+            zoom: 11,
+            controls: [carRouteButton, masstansitButton]
         }, {
+        buttonMaxWidth: 300
+    },
+        {
             searchControlProvider: 'yandex#search'
-        })
+        }, {
+        boundsAutoApply: true
+    })
+    carRouteButton.select()
+    myMap.geoObjects.add(multiRoute)
 
-    myMap.geoObjects.add(new ymaps.Placemark([parseFloat(user_latitude), parseFloat(user_longitude)], {
+    /*myMap.geoObjects.add(new ymaps.Placemark([parseFloat(user_latitude), parseFloat(user_longitude)], {
             balloonContent: '<strong>Вы</strong>'
         }, {
             preset: 'islands#dotIcon',
@@ -64,7 +101,7 @@ function init(map, sg_name, user_latitude, user_longitude) {
             }, {
         preset: 'islands#dotIcon',
         iconColor: '#735184'
-    }));
+    }));*/
 }
 
 function submit_form(){
