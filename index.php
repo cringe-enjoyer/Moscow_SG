@@ -60,12 +60,10 @@ if (isset($_POST["latitude"])) {
                     <div class='sg-object mb-0' style='display: none' id='" . $sGallery['global_id'] . "'><table class='table-light table-bordered'>";
         $column = 0;
         foreach ($sGallery as $col => $row) {
-            if ('ObjectName' == $col or 'global_id' == $col or 'PhotoSummer' == $col or
-                'longitude' == $col or 'latitude' == $col or 'geoarea' == $col or 'distance' == $col) {
+            if ('ObjectName' == $col or 'global_id' == $col or 'longitude' == $col or 'latitude' == $col or 'distance' == $col) {
                 continue;
             }
             $content .= "<tr class='table-light' >";
-
 
             if (is_null($row)) {
                 $content .= "<td class='table-light'>" . COLUMNS_NAME[$column] . "</td>
