@@ -58,12 +58,26 @@ function init(){
         })
 
     for (i = 0; i < info.length; i++){
-        myMap.geoObjects.add(new ymaps.Placemark([parseFloat(info[i]['latitude']), parseFloat(info[i]['longitude'])], {
-            balloonContent: '<strong>Название:</strong>' + info[i]['ObjectName'] + ' (' + info[i]['NameSummer'] + ')'
+        let placemark = new ymaps.Placemark([parseFloat(info[i]['latitude']), parseFloat(info[i]['longitude'])], {
+            balloonContentHeader: '<strong>Название:</strong> ' + info[i]['ObjectName'] + ' (' + info[i]['NameSummer'] + ')'
         }, {
             preset: 'islands#dotIcon',
             iconColor: '#f10b0b'
-        }))
+        })
+        placemark.events.add('balloonopen', function (e) {
+        //placemark.properties.set('balloonContent', 'Идет загрузка данных...');
+
+        ymaps.geocode(placemark.geometry.getCoordinates(), {
+            results: 1
+        }).then(function (res) {
+            var newContent = res.geoObjects.get(0) ?
+                    '<strong>Адресс</strong>: ' + res.geoObjects.get(0).properties.get('name') :
+                    'Не удалось определить адрес'
+            placemark.properties.set('balloonContentBody', newContent);
+        });
+        
+    });
+        myMap.geoObjects.add(placemark)
     }
 
 }
