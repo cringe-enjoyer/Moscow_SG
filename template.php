@@ -92,9 +92,4 @@
 
     </main>
 </body>
-<footer id="footer" class="footer <? if($limit == 3) echo 'position-fixed'?> bottom-0">
-    <div class="footer-info">
-        <p>&copy;Корчагин И.В.</p>
-    </div>
-</footer>
 </html>

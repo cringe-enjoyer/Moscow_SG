@@ -8,27 +8,18 @@ let limit = 3;
 
 function showText(element, user_latitude, user_longitude, id) {
     let sg_info = document.getElementById(id);
-    let footer = document.getElementById('footer');
 
     //Hiding additional information after the user clicks on the name of the shooting gallery
     if (sg_info.style.display != 'none') {
-        sgOpenCount--;
         sg_info.style.display = 'none';
         element.classList.remove('mb-0');
         element.classList.remove('align-center');
         let map = document.getElementById("map" + id);
         sg_info.removeChild(map);
 
-        //Fixing position footer if user sees three shooting gallery and additional information about them are hiding.
-        //Make this for more pretty view
-        if(sgOpenCount == 0 && limit == 3)
-            footer.classList.add('position-fixed')
     }
     //Showing more information to the user after he clicks on the name of the shooting gallery
     else {
-        if(sgOpenCount == 0)
-            footer.classList.remove('position-fixed');
-        sgOpenCount++;
         sg_info.style.display = 'flex'
         element.classList.add('mb-0');
         latitude = element.dataset.latitude;
