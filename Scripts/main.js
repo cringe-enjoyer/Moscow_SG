@@ -9,6 +9,8 @@ let limit = 3;
 function showText(element, user_latitude, user_longitude, id) {
     let sg_info = document.getElementById(id);
     let footer = document.getElementById('footer');
+
+    //Hiding additional information after the user clicks on the name of the shooting gallery
     if (sg_info.style.display != 'none') {
         sgOpenCount--;
         sg_info.style.display = 'none';
@@ -16,9 +18,13 @@ function showText(element, user_latitude, user_longitude, id) {
         element.classList.remove('align-center');
         let map = document.getElementById("map" + id);
         sg_info.removeChild(map);
+
+        //Fixing position footer if user sees three shooting gallery and additional information about them are hiding.
+        //Make this for more pretty view
         if(sgOpenCount == 0 && limit == 3)
             footer.classList.add('position-fixed')
     }
+    //Showing more information to the user after he clicks on the name of the shooting gallery
     else {
         if(sgOpenCount == 0)
             footer.classList.remove('position-fixed');
@@ -48,6 +54,7 @@ function checkAddress(address){
 
 
 function init(map, sg_name, user_latitude, user_longitude) {
+    //Create a route between the user's address and the shooting gallery
     var multiRoute = new ymaps.multiRouter.MultiRoute({
         referencePoints: [
             [user_latitude, user_longitude],
@@ -58,21 +65,23 @@ function init(map, sg_name, user_latitude, user_longitude) {
         }}, {
         boundsAutoApply: true
     })
+
+    //Add buttons for the user that allow him to choose a route for a car or public transport
     var carRouteButton = new ymaps.control.Button({
             data: {content: "На машине"},
             options: {selectOnClick: true}
         }),
-        masstansitButton = new ymaps.control.Button({
+        masstransitButton = new ymaps.control.Button({
             data: {content: "На общественном транспорте"},
             options: {selectOnClick: true}
         });
 
     carRouteButton.events.add('select', function (){
         multiRoute.model.setParams({routingMode: 'auto'}, true)
-        masstansitButton.deselect()
+        masstransitButton.deselect()
     });
 
-    masstansitButton.events.add('select', function (){
+    masstransitButton.events.add('select', function (){
         multiRoute.model.setParams({routingMode: 'masstransit'}, true)
         carRouteButton.deselect()
     });
@@ -80,7 +89,7 @@ function init(map, sg_name, user_latitude, user_longitude) {
     myMap = new ymaps.Map(map.id + "", {
             center: [55.76, 37.64],
             zoom: 11,
-            controls: [carRouteButton, masstansitButton]
+            controls: [carRouteButton, masstransitButton]
         }, {
         buttonMaxWidth: 300
     },
@@ -106,6 +115,7 @@ function submit_form(){
             zoom: 10
         });
 
+        //Getting latitude and longitude by geocode and sending them to the server
         ymaps.geocode(good_address, {
 
             results: 1
@@ -134,6 +144,7 @@ function submit_form(){
                 checkZoomRange: false
             });
 
+            //Add user coordinates to the form
             form.elements.latitude.value = userCoordinates[0].toString()
             form.elements.longitude.value = userCoordinates[1].toString()
             form.submit()
@@ -141,7 +152,7 @@ function submit_form(){
 
     }
     else{
-        alert('Вы ввели странный адрес. Попробуйте ещё.')
+        alert('Вы ввели некорректный адрес. Попробуйте ещё раз.')
     }
 }
 

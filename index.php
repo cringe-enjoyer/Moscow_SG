@@ -6,6 +6,35 @@ const COLUMNS_NAME = ["Название в летний период", "Адми
     "Размеры в летний период", "Освещение", "Покрытие в летний период", "Кол-во посадочных мест", "Форма посещения",
     "Комментарий к стоимости посещения", "Приспособленность для занятий инвалидов", "Дополнительные услуги"];
 
+$pattern = "/([A-Z a-z]+:)/";
+
+function checkFilter(){
+    $query_change = "";
+    $filterCount = 0;
+    if(isset($_POST['WiFi'])) {
+        $query_change .= "NOT HasWifi LIKE 'нет' ";
+        $filterCount++;
+    }
+    if(isset($_POST['disability'])) {
+        if($filterCount > 0)
+            $query_change .= "AND ";
+        $query_change .= "NOT DisabilityFriendly LIKE 'нет' ";
+        $filterCount++;
+    }
+    if(isset($_POST['food'])) {
+        if($filterCount > 0)
+            $query_change .= "AND ";
+        $query_change .= "NOT HasEatery LIKE 'нет' ";
+        $filterCount++;
+    }
+    if(isset($_POST['music'])) {
+        if($filterCount > 0)
+            $query_change .= "AND ";
+        $query_change .= "NOT HasMusic LIKE 'нет'";
+    }
+    return $query_change;
+}
+
 require ('DB.php');
 $content = '';
 if (isset($_POST['count']))
@@ -13,7 +42,7 @@ if (isset($_POST['count']))
 else $limit = 3;
 
 
-$pattern = "/([A-Z a-z]+:)/";
+
 if (isset($_POST["latitude"])) {
 
     $latitude = $_POST["latitude"];
@@ -23,30 +52,9 @@ if (isset($_POST["latitude"])) {
             COS(" . $latitude . " * PI() / 180) * 
              COS((longitude * PI() / 180) - (" . $longitude . " * PI() / 180)))) as 'distance',
              sg_data2.* FROM sg_data2 ";
-    $filter = "";
-    $filterCount = 0;
-    if(isset($_POST['WiFi'])) {
-        $filter .= "NOT HasWifi LIKE 'нет' ";
-        $filterCount++;
-    }
-    if(isset($_POST['disability'])) {
-        if($filterCount > 0)
-            $filter .= "AND ";
-        $filter .= "NOT DisabilityFriendly LIKE 'нет' ";
-        $filterCount++;
-    }
-    if(isset($_POST['food'])) {
-        if($filterCount > 0)
-            $filter .= "AND ";
-        $filter .= "NOT HasEatery LIKE 'нет' ";
-        $filterCount++;
-    }
-    if(isset($_POST['music'])) {
-        if($filterCount > 0)
-            $filter .= "AND ";
-        $filter .= "NOT HasMusic LIKE 'нет'";
-        $filterCount++;
-    }
+
+    $filter = checkFilter();
+
     if($filter != "")
         $query .= "WHERE ".$filter;
     $query .= " ORDER BY distance LIMIT " . $limit;
