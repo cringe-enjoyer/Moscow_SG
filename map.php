@@ -37,7 +37,7 @@ echo "<!DOCTYPE html>
             </a>
         </div>
         <div class='d-flex justify-content-right'>
-            <a class='mscmap p-0' href='map.php' style='text-decoration: none'>Карта</a>
+            <a class='mscmap p-0' href='map.php' style='text-decoration: none' title='Карта тиров Москвы'>Карта</a>
         </div>
 
     </header>
