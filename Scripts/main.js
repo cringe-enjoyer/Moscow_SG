@@ -4,6 +4,7 @@ let latitude;
 let longitude;
 var myMap = undefined;
 let sgOpenCount = 0;
+let limit = 3;
 
 function showText(element, user_latitude, user_longitude, id) {
     let sg_info = document.getElementById(id);
@@ -15,7 +16,7 @@ function showText(element, user_latitude, user_longitude, id) {
         element.classList.remove('align-center');
         let map = document.getElementById("map" + id);
         sg_info.removeChild(map);
-        if(sgOpenCount == 0)
+        if(sgOpenCount == 0 && limit == 3)
             footer.classList.add('position-fixed')
     }
     else {
@@ -91,17 +92,6 @@ function init(map, sg_name, user_latitude, user_longitude) {
     carRouteButton.select()
     myMap.geoObjects.add(multiRoute)
 
-    /*myMap.geoObjects.add(new ymaps.Placemark([parseFloat(user_latitude), parseFloat(user_longitude)], {
-            balloonContent: '<strong>Вы</strong>'
-        }, {
-            preset: 'islands#dotIcon',
-            iconColor: '#f10b0b'
-        })).add(new ymaps.Placemark([parseFloat(sg_name.dataset.latitude), parseFloat(sg_name.dataset.longitude)], {
-            balloonContent: sg_name.innerHTML.toString()
-            }, {
-        preset: 'islands#dotIcon',
-        iconColor: '#735184'
-    }));*/
 }
 
 function submit_form(){
@@ -160,4 +150,5 @@ window.onload = function () {
         if (event.keyCode == 13)
             document.getElementById('find').click();
     }
+    limit = Number(document.getElementById('count').value)
 }

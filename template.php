@@ -16,10 +16,15 @@
 </head>
 
 <body>
-<header class="header">
-    <img src="img/logo.svg" class="logo">
+<header class="header justify-content-between">
+    <img src="img/logo.svg" class="">
     <div class="container-header">
-        <h1 class="title">СТРЕЛКОВЫЕ ТИРЫ МОСКВЫ</h1>
+        <a class='mscmap p-0' style='text-decoration: none' href='index.php'>
+            <h1 class='title'>СТРЕЛКОВЫЕ ТИРЫ МОСКВЫ</h1>
+        </a>
+    </div>
+    <div class="d-flex justify-content-right">
+        <a class="mscmap p-0" href="map.php" style="text-decoration: none">Карта</a>
     </div>
 
 </header>
@@ -30,13 +35,13 @@
                     <input name="latitude" id="latitude" type="hidden">
                     <input name="longitude" id="longitude" type="hidden">
                     <input id="enter" name="enter" type="submit" onclick="return false" hidden>
-                    <div class="row">
+                    <div class="row col-12">
                         <label class="address-label" for="address">Введите ваш адрес</label>
                         <div class="col-11">
                             <input class="address-input w-100" id="address" name="address" type="text" value="<?if (isset($_POST['address'])) echo $_POST['address']?>" placeholder="Большая Семеновская 38" required>
                         </div>
                         <div class="col-1">
-                            <select id="count" name="count" style="max-width: 50px">
+                            <select id="count" name="count">
                                 <option <?if($limit == 3) echo "selected='selected'"?>>3</option>
                                 <option <?if($limit == 5) echo "selected='selected'"?>>5</option>
                                 <option <?if($limit == 10) echo "selected='selected'"?>>10</option>
@@ -45,6 +50,33 @@
                         </div>
 
                     </div>
+                    <button class="filter dropdown-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        Фильтры
+                    </button>
+                    <div class="collapse" id="collapseExample">
+                        <div class="container row">
+                            <div class="col"
+                            <label>
+                                Wi-Fi
+                                <input name="WiFi" type="checkbox" <?if(isset($_POST['WiFi'])) echo 'checked'?>>
+                            </label>
+                            <label>
+                                Наличие музыкального сопровождения
+                                <input name="music" type="checkbox" <?if(isset($_POST['music'])) echo 'checked'?>>
+                            </label>
+                        </div>
+                        <div class="col">
+                            <label>
+                                Приспособленость для занятий инвалидов
+                                <input name="disability" type="checkbox" <?if(isset($_POST['disability'])) echo 'checked'?>>
+                            </label>
+                            <label>
+                                Точка питания
+                                <input name="food" type="checkbox" <?if(isset($_POST['food'])) echo 'checked'?>>
+                            </label>
+                        </div>
+                    </div>
+                </div>
                     <button name="find" id="find" type="button" onclick="submit_form()" class="button">Найти</button>
                 </form>
             </div>
@@ -57,9 +89,10 @@
 <div id="map">
 
 </div>
+
     </main>
 </body>
-<footer id="footer" class="footer position-fixed bottom-0">
+<footer id="footer" class="footer <? if($limit == 3) echo 'position-fixed'?> bottom-0">
     <div class="footer-info">
         <p>&copy;Корчагин И.В.</p>
     </div>

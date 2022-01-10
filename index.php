@@ -1,10 +1,10 @@
 <?php
 const COLUMNS_NAME = ["Название в летний период", "Административный округ", "Район", "Адрес", "Электронная почта",
-    "Сайт", "Телефон", "График работы в летний период", "Возможность проката оборудования",
+    "Сайт", "Телефон", "График работы", "Возможность проката оборудования",
     "Наличие сервиса тех. обслуживания", "Наличие раздевалки", "Наличие точки питания", "Наличие туалета", "Наличие Wi-Fi",
-    "Наличие банкомата", "Наличие медпункта", "Наличие звукового сопровождения", "Период эксплуатации в летний период",
+    "Наличие банкомата", "Наличие медпункта", "Наличие звукового сопровождения", "Период эксплуатации",
     "Размеры в летний период", "Освещение", "Покрытие в летний период", "Кол-во посадочных мест", "Форма посещения",
-    "Комментарий к стоимости посещения", "Приспособленность для занятий инвалидов", "Услуги предоставляемые в летний период"];
+    "Комментарий к стоимости посещения", "Приспособленность для занятий инвалидов", "Дополнительные услуги"];
 
 require ('DB.php');
 $content = '';
@@ -22,15 +22,41 @@ if (isset($_POST["latitude"])) {
     $query = "SELECT (ACOS(SIN(latitude * PI() / 180) * SIN(" . $latitude . " * PI() / 180) + COS(latitude * PI() / 180) * 
             COS(" . $latitude . " * PI() / 180) * 
              COS((longitude * PI() / 180) - (" . $longitude . " * PI() / 180)))) as 'distance',
-             sg_data2.* FROM sg_data2 
-            ORDER BY distance LIMIT " . $limit;
+             sg_data2.* FROM sg_data2 ";
+    $filter = "";
+    $filterCount = 0;
+    if(isset($_POST['WiFi'])) {
+        $filter .= "NOT HasWifi LIKE 'нет' ";
+        $filterCount++;
+    }
+    if(isset($_POST['disability'])) {
+        if($filterCount > 0)
+            $filter .= "AND ";
+        $filter .= "NOT DisabilityFriendly LIKE 'нет' ";
+        $filterCount++;
+    }
+    if(isset($_POST['food'])) {
+        if($filterCount > 0)
+            $filter .= "AND ";
+        $filter .= "NOT HasEatery LIKE 'нет' ";
+        $filterCount++;
+    }
+    if(isset($_POST['music'])) {
+        if($filterCount > 0)
+            $filter .= "AND ";
+        $filter .= "NOT HasMusic LIKE 'нет'";
+        $filterCount++;
+    }
+    if($filter != "")
+        $query .= "WHERE ".$filter;
+    $query .= " ORDER BY distance LIMIT " . $limit;
     $result = mysqli_query($conn, $query);
     $content = "";
     while ($sGallery = mysqli_fetch_assoc($result)) {
 
-        $content .= "<h1 class='sg-name' onclick='showText(this, " . $latitude . ", " . $longitude . ", " . $sGallery['global_id'] . ")'
+        $content .= "<h1 class='sg-name bg-light' onclick='showText(this, " . $latitude . ", " . $longitude . ", " . $sGallery['global_id'] . ")'
                  data-latitude='" . $sGallery['latitude'] . "' 
-        data-longitude='" . $sGallery['longitude'] . "'>" . $sGallery['ObjectName'] . "</h1>
+        data-longitude='" . $sGallery['longitude'] . "'><strong>" . $sGallery['ObjectName'] . "</strong><br>(".$sGallery['NameSummer'].")</h1>
                     <div class='sg-object mb-0' style='display: none' id='" . $sGallery['global_id'] . "'><table class='table-light table-bordered'>";
         $column = 0;
         foreach ($sGallery as $col => $row) {
