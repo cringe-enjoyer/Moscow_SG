@@ -1,10 +1,14 @@
 <?php
-const COLUMNS_NAME = ["Название в летний период", "Административный округ", "Район", "Адрес", "Электронная почта",
-    "Сайт", "Телефон", "График работы", "Возможность проката оборудования",
-    "Наличие сервиса тех. обслуживания", "Наличие раздевалки", "Наличие точки питания", "Наличие туалета", "Наличие Wi-Fi",
-    "Наличие банкомата", "Наличие медпункта", "Наличие звукового сопровождения", "Период эксплуатации",
-    "Размеры", "Освещение", "Покрытие", "Кол-во посадочных мест", "Форма посещения",
-    "Комментарий к стоимости посещения", "Приспособленность для занятий инвалидов", "Дополнительные услуги"];
+const COLUMNS_NAME = ["NameSummer" => "Название в летний период", "AdmArea" => "Административный округ", "District" => "Район",
+    "Street" => "Улица", "House" => "Адрес", "Email" => "Электронная почта", "WebSite" => "Сайт", "HelpPhone" => "Телефон",
+    "WorkingHoursSummer" => "График работы", "HasEquipmentRental" => "Возможность проката оборудования",
+    "HasTechService" => "Наличие сервиса тех. обслуживания", "HasDressingRoom" => "Наличие раздевалки",
+    "HasEatery" => "Наличие точки питания", "HasToilet" => "Наличие туалета", "HasWifi" => "Наличие Wi-Fi",
+    "HasCashMachine" => "Наличие банкомата", "HasFirstAidPost" => "Наличие медпункта",
+    "HasMusic" => "Наличие звукового сопровождения", "UsagePeriodSummer" => "Период эксплуатации", "DimensionsSummer" => "Размеры",
+    "Lighting" => "Освещение", "SurfaceTypeSummer" => "Покрытие", "Seats" => "Количество посадочных мест",
+    "Paid" => "Форма посещения", "PaidComments" => "Комментарий к стоимости посещения",
+    "DisabilityFriendly" => "Приспособленность для занятий инвалидов", "ServicesSummer" => "Дополнительные услуги"];
 
 $pattern = "/([A-Z a-z]+:)/";
 
@@ -51,7 +55,7 @@ if (isset($_POST["latitude"])) {
     $query = "SELECT (ACOS(SIN(latitude * PI() / 180) * SIN(" . $latitude . " * PI() / 180) + COS(latitude * PI() / 180) * 
             COS(" . $latitude . " * PI() / 180) * 
              COS((longitude * PI() / 180) - (" . $longitude . " * PI() / 180)))) as 'distance',
-             sg_data2.* FROM sg_data2 ";
+             ShootingGallery.*, Address.AdmArea, Address.District, Address.Street, Address.House FROM ShootingGallery INNER JOIN Address ON address_id = Address.id";
 
     $filter = checkFilter();
 
@@ -66,15 +70,16 @@ if (isset($_POST["latitude"])) {
                  data-latitude='" . $sGallery['latitude'] . "' 
         data-longitude='" . $sGallery['longitude'] . "'><strong>" . $sGallery['ObjectName'] . "</strong><br>(".$sGallery['NameSummer'].")</h1>
                     <div class='sg-object mb-0' style='display: none' id='" . $sGallery['global_id'] . "'><table class='table-light table-bordered'>";
-        $column = 0;
+
         foreach ($sGallery as $col => $row) {
-            if ('ObjectName' == $col or 'global_id' == $col or 'longitude' == $col or 'latitude' == $col or 'distance' == $col) {
+            if ('ObjectName' == $col or 'global_id' == $col or 'longitude' == $col or 'latitude' == $col or 'distance' == $col
+            or 'address_id' == $col) {
                 continue;
             }
             $content .= "<tr class='table-light' >";
 
             if (is_null($row)) {
-                $content .= "<td class='table-light'>" . COLUMNS_NAME[$column] . "</td>
+                $content .= "<td class='table-light'>" . COLUMNS_NAME[$col] . "</td>
                 <td class='table-light'>Нет</td>";
             } elseif ('WorkingHoursSummer' == $col) {
                 $day = preg_split($pattern, $row);
@@ -83,28 +88,26 @@ if (isset($_POST["latitude"])) {
                     $workingHours .= $day[$i] . " " . $day[$i + 1] . "<br>";
                     $i += 2;
                 }
-                $content .= "<td class='table-light'>" . COLUMNS_NAME[$column] . "</td>
+                $content .= "<td class='table-light'>" . COLUMNS_NAME[$col] . "</td>
                 <td class='table-light'>" . $workingHours . "</td>";
 
             } elseif ('DimensionsSummer' == $col) {
                 $dimension = preg_split($pattern, $row);
-                $content .= "<td class='table-light'>" . COLUMNS_NAME[$column] . "</td>
+                $content .= "<td class='table-light'>" . COLUMNS_NAME[$col] . "</td>
                         <td class='table-light'>
                 <p>Площадь: " . $dimension[1] . "<br>Длина:" . $dimension[2] . "<br>Высота:" . $dimension[3] . "<p></td>";
 
             } elseif ('WebSite' == $col) {
-                $content .= "<td class='table-light'>" . COLUMNS_NAME[$column] . "</td>
+                $content .= "<td class='table-light'>" . COLUMNS_NAME[$col] . "</td>
                 <td class='table-light'><a href='//" . $row . "'>" . $row . "</a></td>";
 
             } elseif ('Email' == $col) {
-                $content .= "<td class='table-light'>" . COLUMNS_NAME[$column] . "</td>
+                $content .= "<td class='table-light'>" . COLUMNS_NAME[$col] . "</td>
                 <td class='table-light'><a href='mailto:" . $row . "'>" . $row . "</a></td>";
-
             } else
-                $content .= "<td class='table-light'>" . COLUMNS_NAME[$column] . "</td>
+                $content .= "<td class='table-light'>" . COLUMNS_NAME[$col] . "</td>
                 <td class='table-light'>" . $row . "</td>";
             $content .= "</tr>";
-            $column++;
         }
         $content .= "</table></div>";
 
