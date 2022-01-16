@@ -38,14 +38,14 @@
                     <div class="row col-12">
                         <label class="address-label" for="address">Введите ваш адрес</label>
                         <div class="col-11">
-                            <input class="address-input w-100" id="address" name="address" type="text" value="<?if (isset($_POST['address'])) echo $_POST['address']?>" placeholder="Большая Семеновская 38" required>
+                            <input class="address-input w-100" id="address" name="address" type="text" value="<?php if (isset($_POST['address'])) echo $_POST['address']?>" placeholder="Большая Семеновская 38" required>
                         </div>
                         <div class="col-1">
                             <select id="count" name="count">
-                                <option <?if($limit == 3) echo "selected='selected'"?>>3</option>
-                                <option <?if($limit == 5) echo "selected='selected'"?>>5</option>
-                                <option <?if($limit == 10) echo "selected='selected'"?>>10</option>
-                                <option <?if($limit == 15) echo "selected='selected'"?>>15</option>
+                                <option <?php if($limit == 3) echo "selected='selected'"?>>3</option>
+                                <option <?php if($limit == 5) echo "selected='selected'"?>>5</option>
+                                <option <?php if($limit == 10) echo "selected='selected'"?>>10</option>
+                                <option <?php if($limit == 15) echo "selected='selected'"?>>15</option>
                             </select>
                         </div>
 
@@ -58,21 +58,21 @@
                             <div class="col"
                             <label>
                                 Wi-Fi
-                                <input name="WiFi" type="checkbox" <?if(isset($_POST['WiFi'])) echo 'checked'?>>
+                                <input name="WiFi" type="checkbox" <?php if(isset($_POST['WiFi'])) echo 'checked'?>>
                             </label>
                             <label>
                                 Наличие музыкального сопровождения
-                                <input name="music" type="checkbox" <?if(isset($_POST['music'])) echo 'checked'?>>
+                                <input name="music" type="checkbox" <?php if(isset($_POST['music'])) echo 'checked'?>>
                             </label>
                         </div>
                         <div class="col">
                             <label>
                                 Приспособленость для занятий инвалидов
-                                <input name="disability" type="checkbox" <?if(isset($_POST['disability'])) echo 'checked'?>>
+                                <input name="disability" type="checkbox" <?php if(isset($_POST['disability'])) echo 'checked'?>>
                             </label>
                             <label>
                                 Точка питания
-                                <input name="food" type="checkbox" <?if(isset($_POST['food'])) echo 'checked'?>>
+                                <input name="food" type="checkbox" <?php if(isset($_POST['food'])) echo 'checked'?>>
                             </label>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
             </div>
         </div>
         <div class="container pb-0 bg-light" id="info">
-            <?echo $content?>
+            <?php echo $content?>
 
         </div>
 

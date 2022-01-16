@@ -1,6 +1,6 @@
 <?php
 require ("DB.php");
-$query = "SELECT ObjectName, NameSummer, latitude, longitude FROM sg_data2";
+$query = "SELECT ObjectName, NameSummer, latitude, longitude FROM ShootingGallery";
 $result = mysqli_query($conn, $query);
 $info = [];
 $number = 0;

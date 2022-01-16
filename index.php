@@ -10,8 +10,6 @@ const COLUMNS_NAME = ["NameSummer" => "Название в летний пери
     "Paid" => "Форма посещения", "PaidComments" => "Комментарий к стоимости посещения",
     "DisabilityFriendly" => "Приспособленность для занятий инвалидов", "ServicesSummer" => "Дополнительные услуги"];
 
-$pattern = "/([A-Z a-z]+:)/";
-
 function checkFilter(){
     $query_change = "";
     $filterCount = 0;
@@ -44,8 +42,6 @@ $content = '';
 if (isset($_POST['count']))
     $limit = $_POST['count'];
 else $limit = 3;
-
-
 
 if (isset($_POST["latitude"])) {
 
