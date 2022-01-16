@@ -55,7 +55,8 @@ if (isset($_POST["latitude"])) {
     $query = "SELECT (ACOS(SIN(latitude * PI() / 180) * SIN(" . $latitude . " * PI() / 180) + COS(latitude * PI() / 180) * 
             COS(" . $latitude . " * PI() / 180) * 
              COS((longitude * PI() / 180) - (" . $longitude . " * PI() / 180)))) as 'distance',
-             ShootingGallery.*, Address.AdmArea, Address.District, Address.Street, Address.House FROM ShootingGallery INNER JOIN Address ON address_id = Address.id";
+             ShootingGallery.*, Address.AdmArea, Address.District, Address.Street, Address.House 
+             FROM ShootingGallery INNER JOIN Address ON address_id = Address.id";
 
     $filter = checkFilter();
 
