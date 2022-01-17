@@ -1,6 +1,6 @@
 <?php
 require ("DB.php");
-$query = "SELECT ObjectName, NameSummer, latitude, longitude FROM ShootingGallery";
+$query = "SELECT ObjectName, SecondName, latitude, longitude FROM ShootingGallery";
 $result = mysqli_query($conn, $query);
 $info = [];
 $number = 0;
@@ -59,7 +59,7 @@ function init(){
 
     for (i = 0; i < info.length; i++){
         let placemark = new ymaps.Placemark([parseFloat(info[i]['latitude']), parseFloat(info[i]['longitude'])], {
-            balloonContentHeader: '<strong>Название:</strong> ' + info[i]['ObjectName'] + ' (' + info[i]['NameSummer'] + ')'
+            balloonContentHeader: '<strong>Название:</strong> ' + info[i]['ObjectName'] + ' (' + info[i]['SecondName'] + ')'
         }, {
             preset: 'islands#dotIcon',
             iconColor: '#f10b0b'

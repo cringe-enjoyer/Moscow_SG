@@ -1,14 +1,14 @@
 <?php
-const COLUMNS_NAME = ["NameSummer" => "Название в летний период", "AdmArea" => "Административный округ", "District" => "Район",
-    "Street" => "Улица", "House" => "Адрес", "Email" => "Электронная почта", "WebSite" => "Сайт", "HelpPhone" => "Телефон",
+const COLUMNS_NAME = ["SecondName" => "Название в летний период", "AdmArea" => "Административный округ", "District" => "Район",
+    "Street" => "Улица", "House" => "Дом", "Email" => "Электронная почта", "WebSite" => "Сайт", "HelpPhone" => "Телефон",
     "schedule_id" => "График работы", "HasEquipmentRental" => "Возможность проката оборудования",
     "HasTechService" => "Наличие сервиса тех. обслуживания", "HasDressingRoom" => "Наличие раздевалки",
     "HasEatery" => "Наличие точки питания", "HasToilet" => "Наличие туалета", "HasWifi" => "Наличие Wi-Fi",
     "HasCashMachine" => "Наличие банкомата", "HasFirstAidPost" => "Наличие медпункта",
-    "HasMusic" => "Наличие звукового сопровождения", "UsagePeriodSummer" => "Период эксплуатации", "Dimensions_id" => "Размеры",
-    "Lighting" => "Освещение", "SurfaceTypeSummer" => "Покрытие", "Seats" => "Количество посадочных мест",
+    "HasMusic" => "Наличие музыкального сопровождения", "UsagePeriod" => "Период эксплуатации", "Dimensions_id" => "Размеры",
+    "Lighting" => "Освещение", "SurfaceType" => "Покрытие", "Seats" => "Количество посадочных мест",
     "Paid" => "Форма посещения", "PaidComments" => "Комментарий к стоимости посещения",
-    "DisabilityFriendly" => "Приспособленность для занятий инвалидов", "ServicesSummer" => "Дополнительные услуги"];
+    "DisabilityFriendly" => "Приспособленность для занятий инвалидов", "Services" => "Дополнительные услуги"];
 
 function checkFilter(){
     $query_change = "";
@@ -58,7 +58,7 @@ if (isset($_POST["latitude"])) {
     $filter = checkFilter();
 
     if($filter != "")
-        $query .= "WHERE ".$filter;
+        $query .= " WHERE ".$filter;
     $query .= " ORDER BY distance LIMIT " . $limit;
     $result = mysqli_query($conn, $query);
     $content = "";
@@ -66,7 +66,7 @@ if (isset($_POST["latitude"])) {
 
         $content .= "<h1 class='sg-name bg-light' onclick='showText(this, " . $latitude . ", " . $longitude . ", " . $sGallery['global_id'] . ")'
                  data-latitude='" . $sGallery['latitude'] . "' 
-        data-longitude='" . $sGallery['longitude'] . "'><strong>" . $sGallery['ObjectName'] . "</strong><br>(".$sGallery['NameSummer'].")</h1>
+        data-longitude='" . $sGallery['longitude'] . "'><strong>" . $sGallery['ObjectName'] . "</strong><br>(".$sGallery['SecondName'].")</h1>
                     <div class='sg-object mb-0' style='display: none' id='" . $sGallery['global_id'] . "'><table class='table-light table-bordered'>";
 
         foreach ($sGallery as $col => $row) {
