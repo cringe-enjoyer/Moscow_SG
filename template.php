@@ -28,7 +28,7 @@
     </div>
 
 </header>
-    <main class="main">
+    <main class="main align-self-center">
         <div class="address-container">
             <div class="container w-100">
                 <form class="container justify-content-center" name="search" method="POST">

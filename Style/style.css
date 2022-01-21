@@ -102,7 +102,7 @@ input, select, textarea{!important;
 .main{
     position: relative;
     width: 45%;
-    margin: 40px auto 100px auto;
+    margin-top: 40px;
     padding: 10px 15px 20px 10px;
     flex-grow: 1;
     font-size: 100%;
@@ -204,7 +204,7 @@ footer{
 
 @media all and (max-width: 813px){
     header{
-        margin-bottom: 30px;
+        margin-bottom: 40px;
     }
     .container-header{
         display: flex;
@@ -213,5 +213,14 @@ footer{
     }
     .logo{
         padding-right: 15px;
+    }
+}
+
+@media all and (max-width: 548px) {
+    header {
+        margin-bottom: 120px;
+    }
+    .main{
+        padding: 0;
     }
 }
