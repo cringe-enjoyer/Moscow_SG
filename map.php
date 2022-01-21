@@ -65,7 +65,6 @@ function init(){
             iconColor: '#f10b0b'
         })
         placemark.events.add('balloonopen', function (e) {
-        //placemark.properties.set('balloonContent', 'Идет загрузка данных...');
 
         ymaps.geocode(placemark.geometry.getCoordinates(), {
             results: 1

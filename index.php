@@ -1,5 +1,5 @@
 <?php
-const COLUMNS_NAME = ["SecondName" => "Название в летний период", "AdmArea" => "Административный округ", "District" => "Район",
+const COLUMNS_NAME = ["SecondName" => "Название в период эксплуатации", "AdmArea" => "Административный округ", "District" => "Район",
     "Street" => "Улица", "House" => "Дом", "Email" => "Электронная почта", "WebSite" => "Сайт", "HelpPhone" => "Телефон",
     "schedule_id" => "График работы", "HasEquipmentRental" => "Возможность проката оборудования",
     "HasTechService" => "Наличие сервиса тех. обслуживания", "HasDressingRoom" => "Наличие раздевалки",
