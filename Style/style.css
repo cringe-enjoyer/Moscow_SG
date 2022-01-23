@@ -71,6 +71,7 @@ body{
     background: #FFFFFF;
     border-radius: 10px;
     font-family: PTSansNarrow;
+    flex-wrap: wrap;
 }
 
 header{
@@ -101,7 +102,7 @@ input, select, textarea{!important;
 
 .main{
     position: relative;
-    width: 45%;
+    width: 60%;
     margin-top: 40px;
     padding: 10px 15px 20px 10px;
     flex-grow: 1;
@@ -202,7 +203,7 @@ footer{
     height: 100%;
 }
 
-@media all and (max-width: 813px){
+@media all and (max-width: 829px){
     header{
         margin-bottom: 40px;
     }
@@ -216,10 +217,13 @@ footer{
     }
 }
 
-@media all and (max-width: 548px) {
+@media all and (max-width: 565px) {
     header {
         margin-bottom: 120px;
     }
+}
+
+@media all and (max-width: 548px) {
     .main{
         padding: 0;
     }
