@@ -150,18 +150,6 @@ input, select, textarea{!important;
     border: none;
 }
 
-.sg-row{
-    display: flex;
-    flex-direction: row;
-
-}
-
-.sg-cell{
-    display: flex;
-    flex-direction: column;
-    margin: 5px;
-}
-
 .sg-name{
     cursor: pointer;
     font-family: PTSansNarrowBold;
@@ -183,19 +171,6 @@ input, select, textarea{!important;
     flex-direction: column;
     width: auto;
     height: 300px;
-}
-
-footer{
-    display: flex;
-    width: 100%;
-    background-color: #000000;
-    margin-top: auto;
-}
-
-.footer-info{
-    margin-left: 10px;
-    font-size: 20px;
-    color: yellow;
 }
 
 .bigmap{

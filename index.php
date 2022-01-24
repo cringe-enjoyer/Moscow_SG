@@ -67,7 +67,8 @@ if (isset($_POST["latitude"])) {
         $content .= "<h1 class='sg-name bg-light' onclick='showText(this, " . $latitude . ", " . $longitude . ", " . $sGallery['global_id'] . ")'
                  data-latitude='" . $sGallery['latitude'] . "' 
         data-longitude='" . $sGallery['longitude'] . "'><strong>" . $sGallery['ObjectName'] . "</strong><br>(".$sGallery['SecondName'].")</h1>
-                    <div class='sg-object mb-0' style='display: none' id='" . $sGallery['global_id'] . "'><table class='table-light table-bordered'>";
+                    <div class='sg-object mb-0' style='display: none' id='" . $sGallery['global_id'] . "'>
+                    <table class='table-light table-bordered fs-5' style='font-family: Arial'>";
 
         foreach ($sGallery as $col => $row) {
             if (!COLUMNS_NAME[$col]){
