@@ -64,7 +64,7 @@ if (isset($_POST["latitude"])) {
     $content = "";
     while ($sGallery = mysqli_fetch_assoc($result)) {
 
-        $content .= "<h1 class='sg-name bg-light' onclick='showText(this, " . $latitude . ", " . $longitude . ", " . $sGallery['global_id'] . ")'
+        $content .= "<h1 class='sg-name bg-light border-bottom pb-1' onclick='showText(this, " . $latitude . ", " . $longitude . ", " . $sGallery['global_id'] . ")'
                  data-latitude='" . $sGallery['latitude'] . "' 
         data-longitude='" . $sGallery['longitude'] . "'><strong>" . $sGallery['ObjectName'] . "</strong><br>(".$sGallery['SecondName'].")</h1>
                     <div class='sg-object mb-0' style='display: none' id='" . $sGallery['global_id'] . "'>

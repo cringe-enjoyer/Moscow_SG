@@ -85,11 +85,6 @@
             <?php echo $content?>
 
         </div>
-
-<div id="map">
-
-</div>
-
     </main>
 </body>
 </html>

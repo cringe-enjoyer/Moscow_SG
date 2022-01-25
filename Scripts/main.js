@@ -3,7 +3,6 @@ const pattern = /^(ул|ул\.|улица|улица\.|Улица|Улица\.)*
 let latitude;
 let longitude;
 var myMap = undefined;
-let sgOpenCount = 0;
 let limit = 3;
 
 function showText(element, user_latitude, user_longitude, id) {
@@ -12,35 +11,34 @@ function showText(element, user_latitude, user_longitude, id) {
     //Hiding additional information after the user clicks on the name of the shooting gallery
     if (sg_info.style.display != 'none') {
         sg_info.style.display = 'none';
-        element.classList.remove('mb-0');
-        element.classList.remove('align-center');
+        element.classList.remove('mb-0', 'align-center');
+        element.classList.add('border-bottom', 'pb-1');
         let map = document.getElementById("map" + id);
         sg_info.removeChild(map);
-
     }
     //Showing more information to the user after he clicks on the name of the shooting gallery
     else {
         sg_info.style.display = 'flex'
-        element.classList.add('mb-0');
         latitude = element.dataset.latitude;
         longitude = element.dataset.longitude;
         let map = document.createElement("div");
         map.className = "map";
-        map.classList.add('justify-content-center')
-        element.classList.add('align-center');
+        map.classList.add('justify-content-center');
+        element.classList.remove('border-bottom', 'pb-1');
+        element.classList.add('mb-0', 'align-center');
         map.id = "map" + id;
         sg_info.append(map);
-        init(map, element, user_latitude, user_longitude)
+        init(map, element, user_latitude, user_longitude);
     }
 }
 
 function checkAddress(address){
-    let check = address.matchAll(pattern)
-    let result = Array.from(check)[0]
+    let check = address.matchAll(pattern);
+    let result = Array.from(check)[0];
     if(result !== undefined){
-        return result[0]
+        return result[0];
     }
-    return null
+    return null;
 }
 
 
@@ -55,7 +53,7 @@ function init(map, sg_name, user_latitude, user_longitude) {
             results: 2
         }}, {
         boundsAutoApply: true
-    })
+    });
 
     //Add buttons for the user that allow him to choose a route for a car or public transport
     var carRouteButton = new ymaps.control.Button({
@@ -88,23 +86,19 @@ function init(map, sg_name, user_latitude, user_longitude) {
             searchControlProvider: 'yandex#search'
         }, {
         boundsAutoApply: true
-    })
-    carRouteButton.select()
-    myMap.geoObjects.add(multiRoute)
+    });
+    carRouteButton.select();
+    myMap.geoObjects.add(multiRoute);
 
 }
 
 function submit_form(){
-    let form = document.forms.search
+    let form = document.forms.search;
     let address = document.getElementById('address').value;
     let good_address = checkAddress(address);
     let userCoordinates = [];
     if(good_address !== null) {
         good_address = 'Москва ' + good_address;
-        var myMap = new ymaps.Map('map', {
-            center: [55.753994, 37.622093],
-            zoom: 10
-        });
 
         //Getting latitude and longitude by geocode and sending them to the server
         ymaps.geocode(good_address, {
@@ -114,31 +108,15 @@ function submit_form(){
 
             var firstGeoObject = res.geoObjects.get(0),
 
-                coords = firstGeoObject.geometry.getCoordinates(),
-
-                bounds = firstGeoObject.properties.get('boundedBy');
+                coords = firstGeoObject.geometry.getCoordinates();
 
             userCoordinates[0] = coords[0];
             userCoordinates[1] = coords[1];
 
-
-
-            firstGeoObject.options.set('preset', 'islands#darkBlueDotIconWithCaption');
-
-            firstGeoObject.properties.set('iconCaption', firstGeoObject.getAddressLine());
-
-
-            myMap.geoObjects.add(firstGeoObject);
-
-            myMap.setBounds(bounds, {
-
-                checkZoomRange: false
-            });
-
             //Add user coordinates to the form
-            form.elements.latitude.value = userCoordinates[0].toString()
-            form.elements.longitude.value = userCoordinates[1].toString()
-            form.submit()
+            form.elements.latitude.value = userCoordinates[0].toString();
+            form.elements.longitude.value = userCoordinates[1].toString();
+            form.submit();
         });
 
     }
